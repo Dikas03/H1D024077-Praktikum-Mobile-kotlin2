@@ -1,5 +1,6 @@
 package com.pemmob.dikas.ui.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -17,21 +20,30 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pemmob.dikas.R
+import com.pemmob.dikas.ui.theme.JualanTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BasicInfoScreen(onNavigateToContact:()-> Unit ){
+fun BasicInfoScreen(
+    isDarkTheme: Boolean = false,
+    onThemeToggle: () -> Unit = {},
+    onNavigateToContact: () -> Unit = {}
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -43,10 +55,34 @@ fun BasicInfoScreen(onNavigateToContact:()-> Unit ){
                         modifier = Modifier.padding(start = 12.dp, end = 4.dp)
                     )
                 },
+                actions = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(
+                            text = if (isDarkTheme) "Dark" else "Light",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Switch(
+                            checked = isDarkTheme,
+                            onCheckedChange = { onThemeToggle() },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                                checkedTrackColor = MaterialTheme.colorScheme.onPrimary,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                            )
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
         }
@@ -59,22 +95,19 @@ fun BasicInfoScreen(onNavigateToContact:()-> Unit ){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(24.dp))
-
             Image(
-                painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+                painter = painterResource(id = R.drawable.logo_jualan),
                 contentDescription = "Logo Aplikasi",
-                modifier = Modifier.size(120.dp)
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape)
             )
-
             Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = "Tentang Jualan",
                 style = MaterialTheme.typography.headlineMedium
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = "Aplikasi Jualan adalah platform yang mewadahi produk lokal UMKM di wilayah Kabupaten Purbalingga, Jawa Tengah.",
                 style = MaterialTheme.typography.bodyLarge,
@@ -84,9 +117,7 @@ fun BasicInfoScreen(onNavigateToContact:()-> Unit ){
                     .background(Color(0xFF4CAF50), shape = MaterialTheme.shapes.medium)
                     .padding(16.dp)
             )
-
             Spacer(modifier = Modifier.height(24.dp))
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -113,9 +144,7 @@ fun BasicInfoScreen(onNavigateToContact:()-> Unit ){
                     )
                 }
             }
-
             Spacer(modifier = Modifier.weight(1f))
-
             Button(
                 onClick = onNavigateToContact,
                 modifier = Modifier
@@ -124,8 +153,16 @@ fun BasicInfoScreen(onNavigateToContact:()-> Unit ){
             ) {
                 Text("Hubungi Kami", style = MaterialTheme.typography.labelLarge)
             }
-
             Spacer(modifier = Modifier.height(16.dp))
         }
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun BasicInfoScreenPreview() {
+    JualanTheme {
+        BasicInfoScreen()
     }
 }
