@@ -46,7 +46,8 @@ import kotlinx.coroutines.launch
 fun HubungiKamiScreen(
     navController: NavController,
     isDarkTheme: Boolean = false,
-    onThemeToggle: () -> Unit = {}
+    onThemeToggle: () -> Unit = {},
+    onNavigateToProducts: () -> Unit = {}
 ) {
     var emailText by remember { mutableStateOf("") }
     var messageText by remember { mutableStateOf("") }
@@ -145,6 +146,8 @@ fun HubungiKamiScreen(
                 onClick = {
                     scope.launch {
                         snackbarHostState.showSnackbar(message = "Pesan Terkirim")
+                        // Navigasi ke halaman produk setelah menampilkan pesan
+                        onNavigateToProducts()
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),

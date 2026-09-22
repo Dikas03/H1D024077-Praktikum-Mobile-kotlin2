@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pemmob.dikas.ui.screen.BasicInfoScreen
 import com.pemmob.dikas.ui.screen.HubungiKamiScreen
+import com.pemmob.dikas.ui.screen.ProductListScreen
 import com.pemmob.dikas.ui.theme.JualanTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,7 +50,14 @@ class MainActivity : ComponentActivity() {
                             HubungiKamiScreen(
                                 isDarkTheme = isDarkTheme,
                                 onThemeToggle = { isDarkTheme = !isDarkTheme },
-                                navController = navController
+                                navController = navController,
+                                onNavigateToProducts = { navController.navigate("product_list") }
+                            )
+                        }
+                        composable("product_list") {
+                            ProductListScreen(
+                                isDarkTheme = isDarkTheme,
+                                onThemeToggle = { isDarkTheme = !isDarkTheme }
                             )
                         }
                     }
